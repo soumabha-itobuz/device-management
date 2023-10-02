@@ -6,6 +6,7 @@ const app = express();
 const port = process.env.PORT;
 
 app.get('/', (req: Request, res: Response) => {
+  console.log('hello world');
   res.send('Hello, TypeScript Express!');
 });
 
