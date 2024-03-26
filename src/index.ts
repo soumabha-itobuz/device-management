@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const app = express();
-const port = process.env.PORT;
+const port = process.env.PORT ?? 4000;
 
 app.get('/', (req: Request, res: Response) => {
   console.log('hello world');
@@ -11,5 +11,5 @@ app.get('/', (req: Request, res: Response) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`API Server running at http://localhost:${port}`);
 });

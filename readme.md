@@ -4,3 +4,6 @@ Stacks
 - Node 
 - Express 
 - Typescript 
+- DB with Docker
+  - postgresql
+  - mongodb
