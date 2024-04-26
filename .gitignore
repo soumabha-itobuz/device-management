@@ -1,7 +1,5 @@
 node_modules
 dist
-package-lock.json
 tmp
 package-lock.json
 .env
-yarn.lock

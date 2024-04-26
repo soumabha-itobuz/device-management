@@ -1,31 +1,186 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mongodb"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-
 model User {
-  id String @id @map("_id") @default(auto()) @db.ObjectId
-  email String  @unique
-  name  String?
-  posts Post[]
+  id                   String     @id @default(uuid())
+  email                String     @unique
+  password             String
+  phoneNo              String
+  verificationToken    String?
+  userType             UserType
+  wrongPasswordAttempt Float
+  lockoutTime          DateTime
+  twoFactorAuthToken   String?
+  roleId               String
+  role                 Role       @relation(fields: [roleId], references: [id])
+  JobSeeker            JobSeeker?
+  Employeer            Employeer?
 }
 
-model Post {
-  id String @id @map("_id") @default(auto()) @db.ObjectId
-  title     String
-  content   String?
-  published Boolean @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  String
+model Role {
+  id          String   @id @default(uuid())
+  privieges   String[]
+  name        String
+  displayName String
+  User        User[]
+}
+
+model JobSeeker {
+  id              String     @id @default(uuid())
+  userId          String     @unique
+  user            User       @relation(fields: [userId], references: [id])
+  profile_image   String
+  banner_image    String
+  fullName        String
+  selfDescription String
+  educationId     String[] // Array of JobSeekerMetadata IDs for education
+  certificates    String[] // Array of JobSeekerMetadata IDs for certificates
+  workExperience  String[] // Array of JobSeekerMetadata IDs for workExperience
+  openTokWork     Boolean
+  isWorking       Boolean
+  Wishlist        Wishlist[]
+  Messages        Messages[]
+}
+
+model JobSeekerMetadata {
+  id          String            @id @default(uuid())
+  jobSeekerId String
+  title       String
+  type        AppMedataDataType
+}
+
+model Employeer {
+  id                 String             @id @default(uuid())
+  userId             String             @unique
+  user               User               @relation(fields: [userId], references: [id])
+  subscription_id    String
+  banner_url         String
+  logo_url           String
+  employeer_name     String
+  address            String
+  descriptions       String
+  stripe_customer_id String
+  EmployerMetadata   EmployerMetadata[]
+  Wishlist           Wishlist[]
+  Messages           Messages[]
+  Billing            Billing[]
+  Job                Job[]
+}
+
+model EmployerMetadata {
+  id         String    @id @default(uuid())
+  employerId String
+  employer   Employeer @relation(fields: [employerId], references: [id])
+  title      String
+  type       String
+}
+
+model Wishlist {
+  id        String           @id @default(uuid())
+  userId    String?
+  jobSeeker JobSeeker?       @relation(fields: [userId], references: [userId])
+  favUserId String?
+  employer  Employeer?       @relation(fields: [favUserId], references: [userId])
+  type      WishlistUserType
+}
+
+model Job {
+  id               String    @id @default(uuid())
+  employerId       String
+  employer         Employeer @relation(fields: [employerId], references: [id])
+  title            String
+  numberOfOpenings Decimal
+  language         String[]
+  jobType          String[]
+  schedule         String[]
+  payRangeStart    Int
+  payRangeEnd      Int
+  supplementalPay  String[]
+  benifits         String[]
+  jobDescriptions  String
+  preScrenning     String[] // JobMetadata ID
+
+  communicationSettings String[] // Email IDs
+  requireCv             Boolean
+  dailyUpdateEmail      String[] // email Ids
+  applicationDeadLine   DateTime?
+  JobMetadata           JobMetadata[]
+}
+
+model JobMetadata {
+  id    String @id @default(uuid())
+  jobId String
+  job   Job    @relation(fields: [jobId], references: [id])
+  title String
+  type  String
+}
+
+model Messages {
+  id          String    @id @default(uuid())
+  jobSeekerId String
+  jobSeeker   JobSeeker @relation(fields: [jobSeekerId], references: [id])
+  employerId  String
+  employer    Employeer @relation(fields: [employerId], references: [id])
+  message     String
+}
+
+model Subscription {
+  id      String           @id @default(uuid())
+  type    SubscriptionType
+  content String
+  Billing Billing[]
+}
+
+model Billing {
+  id             String       @id @default(uuid())
+  emolyerId      String
+  employer       Employeer    @relation(fields: [emolyerId], references: [id])
+  subscriptionId String
+  subscription   Subscription @relation(fields: [subscriptionId], references: [id])
+  price          Decimal
+  sucess_log     String
+  error_log      String
+}
+
+model AppMedataData {
+  id    Int               @id @default(autoincrement())
+  type  AppMedataDataType
+  label String
+  value String
+}
+
+enum AppMedataDataType {
+  INTEREST
+  SKILLS
+  DEPARTMENT
+  AMMENITIES
+  GEOGRAPHY
+  LANGUAGE
+  JOB_TYPE
+  JOB_SCHEDULE
+  JOB_SUPPLEMENTALPAY
+  JOB_BENEFITS
+}
+
+enum UserType {
+  EMPLOYER
+  EMPLOYEE
+  OWNER
+}
+
+enum WishlistUserType {
+  EMPLOYER
+  EMPLOYEE
+}
+
+enum SubscriptionType {
+  FREE
+  BASIC
+  PREMIUM
 }

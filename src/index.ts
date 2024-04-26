@@ -5,13 +5,13 @@ dotenv.config();
 import { appEnv } from './env';
 
 const app = express();
-const port = process.env.PORT ?? 4000;
+app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
+app.get('/', async (req: Request, res: Response) => {
   console.log('hello world');
   res.send('Hello, TypeScript Express!');
 });
 
-app.listen(port, () => {
+app.listen(appEnv.APPLICATION_PORT, () => {
   console.log(`API Server running at http://${appEnv.APPLICATION_URL}:${appEnv.APPLICATION_PORT}`);
 });
