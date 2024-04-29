@@ -91,34 +91,33 @@ model Wishlist {
 }
 
 model Job {
-  id               String    @id @default(uuid())
+  id               String      @id @default(uuid())
   employerId       String
-  employer         Employeer @relation(fields: [employerId], references: [id])
+  employer         Employeer   @relation(fields: [employerId], references: [id])
   title            String
   numberOfOpenings Decimal
-  language         String[]
-  jobType          String[]
-  schedule         String[]
+  language         String[] // JobMetadata IDs
+  jobType          String[] // JobMetadata IDs
+  schedule         String[] // JobMetadata IDs
   payRangeStart    Int
   payRangeEnd      Int
-  supplementalPay  String[]
+  supplementalPay  String[] // JobMetadata IDs
   benifits         String[]
   jobDescriptions  String
-  preScrenning     String[] // JobMetadata ID
+  jobSkills       String[] // JobMetadata IDs
 
   communicationSettings String[] // Email IDs
   requireCv             Boolean
   dailyUpdateEmail      String[] // email Ids
   applicationDeadLine   DateTime?
-  JobMetadata           JobMetadata[]
 }
 
 model JobMetadata {
-  id    String @id @default(uuid())
-  jobId String
-  job   Job    @relation(fields: [jobId], references: [id])
-  title String
-  type  String
+  id            String   @id @default(uuid())
+  jobId         String
+  descriptions  String
+  appMetaDataId String[] // Ref of AppMetaDataId
+  type          String
 }
 
 model Messages {
