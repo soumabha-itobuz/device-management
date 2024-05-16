@@ -10,3 +10,5 @@ services:
         - POSTGRES_DB=node_pretaa_testing
       ports:
         - '5432:5432'
+
+      # postgresql://nodeProdUser:postgresPasswword@localhost:5432/node_pretaa_testing
