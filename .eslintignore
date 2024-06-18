@@ -2,3 +2,4 @@ dist
 .eslintrc.js
 .prettierrc.js
 global.d.ts
+src/typings

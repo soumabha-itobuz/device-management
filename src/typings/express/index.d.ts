@@ -1,8 +1,8 @@
+import { Express } from 'express';
 
 declare global {
   namespace Express {
-    interface Request {
-      // user: User;
+    interface Request extends Request {
       jwt?: string;
     }
   }
