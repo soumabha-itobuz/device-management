@@ -1,42 +1,15 @@
+// prisma/schema.prisma
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider = "mongodb"
+  url      = env("DATABASE_URL") // Add this to your .env file
 }
-
-// For mongo use atlas db 
-// datasource db {
-//   provider = "mongodb"
-//   url      = env("DATABASE_URL")
-// }
 
 model User {
-  id String @id @default(uuid()) @map("_id")
-  email                String     @unique
-  password             String
-  phoneNo              String
-  verificationToken    String?
-  userType             UserType
-  wrongPasswordAttempt Float?
-  lockoutTime          DateTime?
-  twoFactorAuthToken   String?
-  roleId               String?
-  // role                 Role       @relation(fields: [roleId], references: [id])
-}
-
-// model Role {
-//   id String @id @default(uuid()) @map("_id")
-//   privieges   String[]
-//   name        String
-//   displayName String
-//   User        User[]
-// }
-
-
-enum UserType {
-  CUSTOMER
-  OWNER
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  name  String
+  email String @unique
 }
