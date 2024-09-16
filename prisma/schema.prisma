@@ -13,3 +13,20 @@ model User {
   name  String
   email String @unique
 }
+
+model assets {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  uuid        String   @unique
+  title       String
+  description String
+  assignee    String
+  created_by  String
+  asset_type  String
+  attachment  String
+  status      String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  deleted_at  DateTime?
+
+  @@map("assets") // Map to the MongoDB collection "assets"
+}

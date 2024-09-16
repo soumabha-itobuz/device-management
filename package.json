@@ -12,7 +12,8 @@
     "serve": "node dist/index.js",
     "lint": "eslint src/**/*.ts --fix",
     "prepare": "husky install",
-    "prisma": "prisma"
+    "prisma": "prisma",
+    "dev": "tsx watch src/server.ts"
   },
   "keywords": [],
   "author": "",
@@ -26,6 +27,7 @@
     "express": "^4.21.0",
     "lodash": "^4.17.21",
     "mongoose": "^8.6.2",
+    "tsx": "^4.19.1",
     "uuid": "^9.0.1",
     "zod": "^3.23.8"
   },
