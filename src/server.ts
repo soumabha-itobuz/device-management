@@ -2,7 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 // import { PrismaClient } from '@prisma/client';
 import { appEnv } from './env';
-import { allAsset, createAsset, singleAsset } from './assets';
+import { allAsset, createAsset, deleteAsset, singleAsset, updateAsset } from './assets';
 
 dotenv.config();
 
@@ -24,6 +24,14 @@ app.get('/all-assets', async (req, res) => {
 
 app.get('/assets/:uuid', async (req, res) => {
   await singleAsset(req, res);
+});
+
+app.put('/update-assets/:uuid', async (req, res) => {
+  await updateAsset(req, res);
+});
+
+app.put('/delete-assets/:uuid', async (req, res) => {
+  await deleteAsset(req, res);
 });
 
 // Start the server

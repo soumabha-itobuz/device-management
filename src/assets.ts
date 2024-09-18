@@ -55,44 +55,44 @@ export async function singleAsset(req: Request, res: Response) {
   }
 }
 
-// // Update an asset by uuid
-// app.put('/assets/:uuid', async (req, res) => {
-//   try {
-//     const { uuid } = req.params;
-//     const { title, description, assignee, created_by, asset_type, attachment, status } = req.body;
-//     const updatedAsset = await prisma.assets.update({
-//       where: { uuid },
-//       data: {
-//         title,
-//         description,
-//         assignee,
-//         created_by,
-//         asset_type,
-//         attachment,
-//         status,
-//         updated_at: new Date(), // Update the timestamp
-//       },
-//     });
-//     res.status(200).json(updatedAsset);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Failed to update asset' });
-//   }
-// });
+// Update an asset by uuid
+export async function updateAsset(req: Request, res: Response) {
+  try {
+    const { uuid } = req.params;
+    const { title, description, assignee, created_by, asset_type, attachment, status } = req.body;
+    const updatedAsset = await prisma.assets.update({
+      where: { uuid },
+      data: {
+        title,
+        description,
+        assignee,
+        created_by,
+        asset_type,
+        attachment,
+        status,
+        updated_at: new Date(), // Update the timestamp
+      },
+    });
+    res.status(200).json(updatedAsset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to update asset' });
+  }
+}
 
-// // Delete an asset by uuid
-// app.delete('/assets/:uuid', async (req, res) => {
-//   try {
-//     const { uuid } = req.params;
-//     const deletedAsset = await prisma.assets.delete({
-//       where: { uuid },
-//     });
-//     res.status(200).json(deletedAsset);
-//   } catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Failed to delete asset' });
-//   }
-// });
+// Delete an asset by uuid
+export async function deleteAsset(req: Request, res: Response) {
+  try {
+    const { uuid } = req.params;
+    const deletedAsset = await prisma.assets.delete({
+      where: { uuid },
+    });
+    res.status(200).json(deletedAsset);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Failed to delete asset' });
+  }
+}
 
 // // Start the server
 // app.listen(port, () => {
