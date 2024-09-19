@@ -1,7 +1,6 @@
 // app.js
 import { Request, Response } from 'express';
 import { PrismaClient } from '@prisma/client';
-import { v4 as uuidv4 } from 'uuid';
 
 const prisma = new PrismaClient();
 
@@ -9,9 +8,8 @@ const prisma = new PrismaClient();
 export async function createAsset(req: Request, res: Response) {
   try {
     const { title, description, assignee, created_by, asset_type, attachment, status } = req.body;
-    const newAsset = await prisma.assets.create({
+    const newAsset = await prisma.asset.create({
       data: {
-        uuid: uuidv4(), // Generate UUID
         title,
         description,
         assignee,
@@ -19,20 +17,21 @@ export async function createAsset(req: Request, res: Response) {
         asset_type,
         attachment,
         status,
+        assignee_id: assignee.id || null,
       },
     });
     // return newAsset
     res.status(201).json(newAsset);
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    res.status(500).json({ error: 'Failed to create asset' });
+    res.status(500).json({ error: error.message });
   }
 }
 
 // Get all assets
 export async function allAsset(req: Request, res: Response) {
   try {
-    const assets = await prisma.assets.findMany();
+    const assets = await prisma.asset.findMany();
     res.status(200).json(assets);
   } catch (error) {
     console.error(error);
@@ -44,7 +43,7 @@ export async function allAsset(req: Request, res: Response) {
 export async function singleAsset(req: Request, res: Response) {
   try {
     const { uuid } = req.params;
-    const asset = await prisma.assets.findUnique({
+    const asset = await prisma.asset.findUnique({
       where: { uuid },
     });
     if (!asset) return res.status(404).json({ error: 'Asset not found' });
@@ -60,7 +59,7 @@ export async function updateAsset(req: Request, res: Response) {
   try {
     const { uuid } = req.params;
     const { title, description, assignee, created_by, asset_type, attachment, status } = req.body;
-    const updatedAsset = await prisma.assets.update({
+    const updatedAsset = await prisma.asset.update({
       where: { uuid },
       data: {
         title,
@@ -84,7 +83,7 @@ export async function updateAsset(req: Request, res: Response) {
 export async function deleteAsset(req: Request, res: Response) {
   try {
     const { uuid } = req.params;
-    const deletedAsset = await prisma.assets.delete({
+    const deletedAsset = await prisma.asset.delete({
       where: { uuid },
     });
     res.status(200).json(deletedAsset);

@@ -12,17 +12,23 @@ model User {
   id    String   @id @default(auto()) @map("_id") @db.ObjectId
   name  String
   email String   @unique
+  team  String
+  password String
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  deleted_at  DateTime?
   assets Asset[] // One-to-many relationship with assets
 }
 
 model Asset {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
-  assignee_id String   @db.ObjectId
-  user        User     @relation(fields: [assignee_id], references: [id])
+  uuid        String   @unique @default(uuid()) // UUID field
+  assignee_id String?   @db.ObjectId
+  user        User?     @relation(fields: [assignee_id], references: [id])
   title       String
   description String
   assignee    String
-  created_by  String
+  created_by  String?
   asset_type  String
   attachment  String
   status      String
@@ -30,5 +36,53 @@ model Asset {
   updated_at  DateTime @updatedAt
   deleted_at  DateTime?
 
-  @@map("assets") // Map to the MongoDB collection "assets"
+  @@map("assets") 
 }
+
+model AssetHistory {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  asset_id    String   @unique 
+  title       String
+  description String?
+  assignee    String?
+  attachment  String?
+  created_at  DateTime @default(now()) 
+  updated_at  DateTime @updatedAt 
+  deleted_at  DateTime? 
+
+  @@map("asset_history") 
+}
+
+model Team {
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   
+  description String?  
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt 
+  deleted_at  DateTime? 
+
+  @@map("team") 
+}
+
+model AssetsStatus {
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String   
+  description String? 
+  created_at  DateTime @default(now()) 
+  updated_at  DateTime @updatedAt 
+  deleted_at  DateTime? 
+
+  @@map("assets_status") 
+}
+
+model AssetsType {
+  id    String   @id @default(auto()) @map("_id") @db.ObjectId
+  title       String  
+  description String?  
+  created_at  DateTime @default(now()) 
+  updated_at  DateTime @updatedAt 
+  deleted_at  DateTime? 
+
+  @@map("assets_type") 
+}
+

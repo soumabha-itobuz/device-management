@@ -14,6 +14,7 @@ app.use(express.json());
 const createUserSchema = z.object({
   name: z.string().min(1, 'Name is required').max(100, 'Name is too long'),
   email: z.string().email('Invalid email address'),
+  team: z.string().length(10),
 });
 
 const updateUserSchema = z.object({
@@ -29,11 +30,15 @@ app.post('/users/create', async (req: Request, res: Response) => {
     return res.status(400).json({ errors: result.error.errors });
   }
 
-  const { name, email } = result.data;
+  const { name, email, team } = result.data;
 
   try {
     const newUser = await prisma.user.create({
-      data: { name, email },
+      data: {
+        name,
+        email,
+        team,
+      },
     });
     res.status(201).json(newUser);
   } catch (error) {
