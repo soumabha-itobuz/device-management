@@ -30,7 +30,7 @@ app.post('/users/create', async (req: Request, res: Response) => {
     return res.status(400).json({ errors: result.error.errors });
   }
 
-  const { name, email, team } = result.data;
+  const { name, email, team, password } = result.data;
 
   try {
     const newUser = await prisma.user.create({
@@ -38,6 +38,7 @@ app.post('/users/create', async (req: Request, res: Response) => {
         name,
         email,
         team,
+        password,
       },
     });
     res.status(201).json(newUser);

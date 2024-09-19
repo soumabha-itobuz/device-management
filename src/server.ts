@@ -3,6 +3,7 @@ import dotenv from 'dotenv';
 // import { PrismaClient } from '@prisma/client';
 import { appEnv } from './env';
 import { allAsset, createAsset, deleteAsset, singleAsset, updateAsset } from './assets';
+import { authenticateToken } from './middleware';
 
 dotenv.config();
 
@@ -14,7 +15,7 @@ app.get('/', (req, res) => {
   res.send('Server is up...');
 });
 
-app.post('/create-asset', async (req, res) => {
+app.post('/create-asset', authenticateToken, async (req, res) => {
   await createAsset(req, res);
 });
 
